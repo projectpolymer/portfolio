@@ -1,0 +1,642 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Design Critique: Interactive Article</title><style>
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, YuMincho, "Yu Mincho", "Hiragino Mincho ProN", "Hiragino Mincho Pro", "Songti TC", "Songti SC", "SimSun", "Nanum Myeongjo", NanumMyeongjo, Batang, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC', 'Noto Sans CJK KR'; }
+
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC', 'Noto Sans Mono CJK KR'; }
+
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, YuMincho, "Yu Mincho", "Hiragino Mincho ProN", "Hiragino Mincho Pro", "Songti TC", "Songti SC", "SimSun", "Nanum Myeongjo", NanumMyeongjo, Batang, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC', 'Noto Sans CJK KR'; }
+
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC', 'Noto Sans Mono CJK KR'; }
+
+.highlight-default {
+}
+.highlight-gray {
+	color: rgb(155,154,151);
+}
+.highlight-brown {
+	color: rgb(100,71,58);
+}
+.highlight-orange {
+	color: rgb(217,115,13);
+}
+.highlight-yellow {
+	color: rgb(223,171,1);
+}
+.highlight-teal {
+	color: rgb(15,123,108);
+}
+.highlight-blue {
+	color: rgb(11,110,153);
+}
+.highlight-purple {
+	color: rgb(105,64,165);
+}
+.highlight-pink {
+	color: rgb(173,26,114);
+}
+.highlight-red {
+	color: rgb(224,62,62);
+}
+.highlight-gray_background {
+	background: rgb(235,236,237);
+}
+.highlight-brown_background {
+	background: rgb(233,229,227);
+}
+.highlight-orange_background {
+	background: rgb(250,235,221);
+}
+.highlight-yellow_background {
+	background: rgb(251,243,219);
+}
+.highlight-teal_background {
+	background: rgb(221,237,234);
+}
+.highlight-blue_background {
+	background: rgb(221,235,241);
+}
+.highlight-purple_background {
+	background: rgb(234,228,242);
+}
+.highlight-pink_background {
+	background: rgb(244,223,235);
+}
+.highlight-red_background {
+	background: rgb(251,228,228);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(55, 53, 47, 0.6);
+	fill: rgba(55, 53, 47, 0.6);
+}
+.block-color-brown {
+	color: rgb(100,71,58);
+	fill: rgb(100,71,58);
+}
+.block-color-orange {
+	color: rgb(217,115,13);
+	fill: rgb(217,115,13);
+}
+.block-color-yellow {
+	color: rgb(223,171,1);
+	fill: rgb(223,171,1);
+}
+.block-color-teal {
+	color: rgb(15,123,108);
+	fill: rgb(15,123,108);
+}
+.block-color-blue {
+	color: rgb(11,110,153);
+	fill: rgb(11,110,153);
+}
+.block-color-purple {
+	color: rgb(105,64,165);
+	fill: rgb(105,64,165);
+}
+.block-color-pink {
+	color: rgb(173,26,114);
+	fill: rgb(173,26,114);
+}
+.block-color-red {
+	color: rgb(224,62,62);
+	fill: rgb(224,62,62);
+}
+.block-color-gray_background {
+	background: rgb(235,236,237);
+}
+.block-color-brown_background {
+	background: rgb(233,229,227);
+}
+.block-color-orange_background {
+	background: rgb(250,235,221);
+}
+.block-color-yellow_background {
+	background: rgb(251,243,219);
+}
+.block-color-teal_background {
+	background: rgb(221,237,234);
+}
+.block-color-blue_background {
+	background: rgb(221,235,241);
+}
+.block-color-purple_background {
+	background: rgb(234,228,242);
+}
+.block-color-pink_background {
+	background: rgb(244,223,235);
+}
+.block-color-red_background {
+	background: rgb(251,228,228);
+}
+.select-value-color-default { background-color: rgba(206,205,202,0.5); }
+.select-value-color-gray { background-color: rgba(155,154,151, 0.4); }
+.select-value-color-brown { background-color: rgba(140,46,0,0.2); }
+.select-value-color-orange { background-color: rgba(245,93,0,0.2); }
+.select-value-color-yellow { background-color: rgba(233,168,0,0.2); }
+.select-value-color-green { background-color: rgba(0,135,107,0.2); }
+.select-value-color-blue { background-color: rgba(0,120,223,0.2); }
+.select-value-color-purple { background-color: rgba(103,36,222,0.2); }
+.select-value-color-pink { background-color: rgba(221,0,129,0.2); }
+.select-value-color-red { background-color: rgba(255,0,26,0.2); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="e9be0d66-c7f3-435d-a095-4f8c823e1401" class="page sans"><header><div class="page-header-icon undefined"><span class="icon">👨🏽‍💼</span></div><h1 class="page-title">Design Critique: Interactive Article</h1></header><div class="page-body"><p id="6ff64a41-0c54-403c-8ec4-4fcff39e1fd9" class=""><mark class="highlight-red"><strong>Module by:</strong></mark> Amit Kapoor</p><p id="b472dcff-5c95-4cbd-b4f7-762f7407f6d6" class=""><mark class="highlight-red"><strong>Submitted by</strong></mark>: Abhilash Kumar</p><p id="f2ad0fb2-5a81-4722-905c-8a88ae87149a" class=""><mark class="highlight-red"><strong>Visualization</strong></mark>: <a href="http://poppyfield.org/">The Poppy Field</a> by Valentina D’Efilippo</p><p id="92d36fb1-69c6-47b3-a1d0-e0c037ad3eba" class="">
+</p><figure id="924c11c0-cab6-442c-896a-4ef19d57ad7e" class="image"><a href="Design%20Critique%20Interactive%20Article%20924c11c0cab6442c896a4ef19d57ad7e/Untitled.png"><img style="width:1029px" src="Design%20Critique%20Interactive%20Article%20924c11c0cab6442c896a4ef19d57ad7e/Untitled.png"/></a></figure><p id="46f995cc-6939-4879-9de5-4afd7660d6a0" class="">
+</p><p id="76c324ee-2eb2-44e7-b14b-d632bbc36b76" class=""><strong><mark class="highlight-red">About the author: </mark></strong></p><p id="a3df5887-b324-4ccf-8615-60001dd19f02" class="">She’s an award-winning information designer, illustrator, and author based in London. In 2013, she published The Infographic History of the World and she also leads creative workshops attended by students and professionals alike, including a series of Masterclasses with The Guardian.</p><p id="04287a5a-904f-421c-86b8-51e2fd968edf" class="">
+</p><p id="451d9b58-506c-4cdd-ab25-eb9d17aef2a7" class=""><strong><mark class="highlight-red">About the viz: </mark></strong></p><p id="be9da70e-f6d6-4f00-962b-6377d6f64146" class="">The First World War was initially dubbed <em>the war to end all wars. </em>Sadly, the world has witnessed more than 200 conflicts in the 100 years since. Poppy Field reflects on the human cost of war from the beginning of the 20th Century.</p><p id="afede55e-6a15-4b95-8994-5bf29d97cf72" class="">
+</p><figure id="2c85abdf-b837-40cd-b9af-b14691527b96" class="image"><a href="Design%20Critique%20Interactive%20Article%20924c11c0cab6442c896a4ef19d57ad7e/Untitled%201.png"><img style="width:844px" src="Design%20Critique%20Interactive%20Article%20924c11c0cab6442c896a4ef19d57ad7e/Untitled%201.png"/></a></figure><p id="f894c711-1a3e-42e2-b20d-5096e2e0ac72" class="">
+</p><p id="73d7fdad-c3d7-4d61-bfd6-3fadb7870f3a" class=""><strong><mark class="highlight-red">Purpose and Objective:</mark></strong></p><ul id="149e2c4e-863f-4f50-89b1-d658a9df78da" class="bulleted-list"><li><mark class="highlight-red">Purpose:</mark><p id="f480e55e-b2b9-40fc-b1ce-6740698d2c72" class="">The visualization portrays the wars that have been fought across the world, from the time period of 1900 till 2014. Along with the timeline, it showcases the continents involved in war, how long war has lasted and the cost(human lives) of the war</p></li></ul><ul id="0ab74885-6457-4039-bce2-bf5f5bbac3ad" class="bulleted-list"><li><mark class="highlight-red">objective:</mark><p id="f0cdaf5b-5a5b-467f-9aed-18f47e8cd7ee" class="">The objective, in broad terms is to display the amount of causalities in the wars that have been fought in human history, involvement of continents etc. It can be used as an informative piece for education or to spread awareness.</p></li></ul><ul id="aaf7a51a-f03a-427f-8d8c-abafb6e58259" class="bulleted-list"><li><mark class="highlight-red">Data:</mark><p id="00956599-71bd-430f-8d6a-861066ae0535" class="">James Ball found the data source: the <a href="https://www.war-memorial.net/">Polynational War Memorial</a> – an independent study which attempts to compile all the conflicts since the beginning of the 1900</p><p id="2024d047-de0d-4ff4-8e1e-590ca049a628" class="">
+</p></li></ul><blockquote id="ba6d470a-3989-4b64-aeb3-9e0a7bf8909d" class=""><mark class="highlight-gray">Visualization starts with the title &quot;The Great War centenary&quot; which establishes a fact that even though the name of the visualization is that of a flower but it covers the topic of war.</mark></blockquote><blockquote id="34fc5ba9-b7a9-4c86-8921-6d717a32a94b" class=""><mark class="highlight-gray">It then opens up to showcasing the legend with an example of &quot;The great war&quot;. It clearly explains the structure of visuals used with a supporting textual element.</mark></blockquote><blockquote id="57d09b80-1167-4b8f-99c4-e9091b959f71" class=""><mark class="highlight-gray">we then get the reason behind the visual metaphor that has been used which would be talked about in next section, in detail.</mark></blockquote><figure id="9594d536-909a-42e0-8ac6-583cd000ab77" class="image"><a href="Design%20Critique%20Interactive%20Article%20924c11c0cab6442c896a4ef19d57ad7e/Untitled%202.png"><img style="width:668px" src="Design%20Critique%20Interactive%20Article%20924c11c0cab6442c896a4ef19d57ad7e/Untitled%202.png"/></a></figure><blockquote id="9eb2a1e4-df10-492e-8bfd-4c1bb13ff174" class=""><mark class="highlight-gray">It goes on with a factual statement to support the overall visualization and speaks about the number of wars that have been fought over in 100 years, in 20th century and human cost of war. It shows the explore button which would start the visualization.</mark></blockquote><figure id="e8f2cf3a-5740-44de-a067-445c82026f23" class="image"><a href="Design%20Critique%20Interactive%20Article%20924c11c0cab6442c896a4ef19d57ad7e/Untitled%203.png"><img style="width:603px" src="Design%20Critique%20Interactive%20Article%20924c11c0cab6442c896a4ef19d57ad7e/Untitled%203.png"/></a></figure><p id="3d5348bc-ca15-4d4f-9e10-f253682b16ec" class="">
+</p><p id="f6a7aeb8-6993-48e5-96d5-9f49b2d1bb41" class="">
+</p><p id="8c8533bb-e34a-467c-a1bf-0c68a8220244" class=""><mark class="highlight-red"><strong>Visualization design</strong></mark></p><p id="4cb48a5e-868a-4fd7-a3e4-ca63576df52c" class="">Abstract form of poppy flower has been used as a metaphor, to represent the human lives lost in the wars. Flower&#x27;s stem depicts the start and end period of the war.</p><p id="013f8a17-d74d-4ca7-836c-01f47f820e10" class="">Following the end of the First World War, the poppy became a symbol of commemoration. It was among the first plants to spring to life on Europe&#x27;s devastated battlefields. Its color, reminiscent of bloodshed, and its resilient yet delicate nature evoke the human relationship to war.</p><blockquote id="22edf98e-213b-4abd-8c83-789ca300bc3c" class=""><mark class="highlight-gray">Metaphor here works flawlessly. It shows the human loss as deep red circle. Bigger the flower and its stem, bigger the loss and longer the war has lasted.</mark></blockquote><blockquote id="96b05394-a190-4ae4-a2ab-ee069ccf3b1a" class=""><mark class="highlight-gray">What doesn&#x27;t work in first go is the way the flower petal colors are used to show the continents involved in the war. The overlay of the colors creates confusion in distinguishing continents.</mark></blockquote><p id="3be2c3cd-fb87-48bc-ba50-0c4d9a7bc000" class="">
+</p><figure id="18ed2472-1c4f-4755-b326-bb5f91ee2db0" class="image"><a href="Design%20Critique%20Interactive%20Article%20924c11c0cab6442c896a4ef19d57ad7e/Untitled%204.png"><img style="width:887px" src="Design%20Critique%20Interactive%20Article%20924c11c0cab6442c896a4ef19d57ad7e/Untitled%204.png"/></a></figure><blockquote id="319dfa30-df53-48fb-9083-ba0b81d228ee" class=""><mark class="highlight-gray">The usage of axes is redundant. The width of the stem depicts how long the war has lasted, which is again shown by the y-axis. Addition of this detail on y-axis makes it clear but also is a redundant information.</mark></blockquote><p id="4297b13d-4f4e-4837-ba61-a2cfb44d0cd0" class="">
+</p><p id="9fec3489-5b32-4675-a3f9-c9b004c19c29" class="">
+</p><p id="3ab90176-bf84-414b-92cd-bb150d0ebc79" class=""><mark class="highlight-red"><strong>Interaction &amp; Narrative Design</strong></mark></p><blockquote id="89c6c7d8-2eff-4c38-b207-b6d2cc2659e8" class=""><mark class="highlight-gray">Narration lies in the display of human loss compared with how long the war has lasted over the years since 1900. Also, one can argue that this is an embellished depiction of time and loss parameters of a certain war.</mark></blockquote><p id="9567fe2c-a3bd-4839-b999-815f1e9b28e4" class="">
+</p><blockquote id="9427a2da-cb6e-45ea-a460-a70e926f1384" class=""><mark class="highlight-gray">The interactive elements in the visualization are the continent selection, number of and the year slider. All of the interactions provided, aid in understanding the visualization. As petals are larger in some cases(world war 2) it hinders the display of shorter ones. Selection of which continent you want to look for over what period of time and human loss in numbers gives a clean, less cluttered view of the data and one can discover underlying insights.</mark></blockquote><figure id="e5f6ca4c-418b-411c-a6d7-a5a73fc27398" class="image"><a href="Design%20Critique%20Interactive%20Article%20924c11c0cab6442c896a4ef19d57ad7e/Untitled%205.png"><img style="width:972px" src="Design%20Critique%20Interactive%20Article%20924c11c0cab6442c896a4ef19d57ad7e/Untitled%205.png"/></a></figure><p id="aa194a19-4150-4a08-95ae-19733f8cc0fb" class="">Continents filters</p><figure id="2247b3ca-d790-4e62-b03f-c0c37a322dfc" class="image"><a href="Design%20Critique%20Interactive%20Article%20924c11c0cab6442c896a4ef19d57ad7e/Untitled%206.png"><img style="width:377px" src="Design%20Critique%20Interactive%20Article%20924c11c0cab6442c896a4ef19d57ad7e/Untitled%206.png"/></a></figure><p id="cd3f2f6a-70a1-4502-be30-53376c98f857" class="">Slider to adjust human loss</p><figure id="7154669e-454c-44d3-bbdd-8e9f4f8f9bf5" class="image"><a href="Design%20Critique%20Interactive%20Article%20924c11c0cab6442c896a4ef19d57ad7e/Untitled%207.png"><img style="width:791px" src="Design%20Critique%20Interactive%20Article%20924c11c0cab6442c896a4ef19d57ad7e/Untitled%207.png"/></a></figure><p id="525545aa-ef6f-483e-81ed-89cb2489f872" class="">Slider to adjust the time line of the wars fought</p><p id="581936f6-caa3-47f9-84b7-b41f2fd82f23" class="">
+</p><p id="76040bd3-9ac9-46ac-9195-c8153e1b2428" class=""><mark class="highlight-red"><strong>Aesthetics &amp; Quality of Design</strong></mark></p><blockquote id="9154e310-9b53-4273-b378-d97e7f44e361" class=""><mark class="highlight-gray">Design elements in the visualization are well thought of. The overall Poppy flowers gives the idea of number of wars fought and human loss in each one, at first glance. </mark></blockquote><blockquote id="115aecd2-0699-4c1d-b6ba-cba6b2eb08c7" class=""><mark class="highlight-gray">Hovering over the flower gives the name of the war, which works as detail on demand, which otherwise would&#x27;ve been very cluttered.</mark></blockquote><blockquote id="209ab917-db64-4d59-a554-880b07ef823b" class=""><mark class="highlight-gray">Animations when the year slider is changed are smooth and gives the sense of continuity and not any abrupt transitions.</mark></blockquote><blockquote id="73dbd203-5dad-4d75-a0e6-3da59cfaa22f" class=""><mark class="highlight-gray">use of different shades of red can be hard to distinguish in smaller flowers.</mark></blockquote><blockquote id="57a13a41-047d-4653-b991-c15d77f8c04f" class=""><mark class="highlight-gray">usage of number of petals can be confusing.</mark></blockquote><p id="788b537f-4fcb-4b5a-b92b-6b93931ecb7c" class="">
+</p><p id="067001c2-dc4a-4c9d-bfb3-92a5b6ac976b" class="">
+</p><p id="e910fad8-e0d1-4287-91a6-b73f6ee0fed7" class=""><mark class="highlight-red"><strong>What-If perspective</strong></mark></p><blockquote id="5983a1b6-199d-44d6-a922-0c82bb0febb1" class=""><mark class="highlight-gray">While the visualization works in a holistic view, some elements can be confusing in the first reading. Usage of y-axis and width of the flow of the petal is redundant. </mark></blockquote><blockquote id="c8cd2c2c-0d23-4040-ac57-38a1b98e5e02" class=""><mark class="highlight-gray">Hovering over gives the name of the war fought and highlights that particular flower, I would also like for other flowers meanwhile, to go lighter so that the focus is on the hovered one</mark></blockquote><blockquote id="7e8599fd-adf4-45ab-9aaf-6e33d60e1a58" class=""><mark class="highlight-gray">Additional detail on demand while hovering over can be the duration of the war and eliminate the y-axis altogether?</mark></blockquote><blockquote id="2732084a-2ff1-4414-85bf-e0d65ff509f5" class=""><mark class="highlight-gray">Use of more distinguishable colors of red can help distinguish countries in smaller flower. </mark></blockquote></div></article></body></html>

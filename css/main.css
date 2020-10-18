@@ -1,0 +1,109 @@
+.slider .btn{
+    margin-top:20px;
+}
+
+.behance-btn{
+    margin-top:20px;
+}
+
+.navibar{
+    font-family: "Fira Mono" !important;
+    
+}
+
+.brand-logo{
+    font-size: 28px !important; 
+    color: black !important;
+    font-weight:bold;
+}
+
+.navibar-sec{ 
+    font-family: "Fira Mono" !important;
+    font-size: 15px !important; 
+    color: black !important;
+}
+
+.intro-text{
+    font-family: "Fira Mono" !important;
+    font-size: 19px !important; 
+    color: black !important;
+    line-height: 1.6;
+}
+
+.self-portrait{
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 80px;
+        margin-bottom: 80px;
+        width: 30%;
+}
+
+.headers{
+    padding: 80px 80px 80px 80px;
+    font-family: "Fira Mono" !important;
+    font-weight:bold;
+    font-size: 21px !important; 
+    color: black !important;
+}
+
+.card-title{
+    font-family: "Fira Mono" !important;
+    font-weight:bold !important;
+    font-size: 19px !important; 
+    color: black !important;
+}
+
+.card-subheaders{
+    font-family: "Fira Mono" !important;
+    font-size: 15px !important; 
+    color: black !important;
+}
+
+.bolder{
+    font-weight:bold;
+}
+
+.social-icons{
+    padding-top: 20px;
+    padding-right: 20px;
+}
+
+.myname{
+    font-weight:bold;
+}
+
+.flow-text{
+    font-family: "Fira Mono" !important;
+    font-size: 15px !important;
+    margin-left: auto;
+        margin-right: auto;
+}
+
+.footer-icons{
+    padding-top: 10px;
+    padding-bottom: 20px;
+    margin-left: auto;
+        margin-right: auto;
+}
+
+.section-others{
+    padding-bottom: 120px;
+}
+
+hr.dashed {
+    border-top: 1px dashed #bbb;
+  }
+
+
+.fa-medium{
+    padding-left: 20px;
+}
+
+.fa-instagram{
+    padding-left: 20px;
+}
+
+.fa-linkedin{
+    padding-left: 20px;
+}
